@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm Sorry!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff85a2;
+            --dark-pink: #ff4d6d;
+            --bg-color: #fff0f3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Floating Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--primary-pink);
+            font-size: 20px;
+            animation: float 5s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary-pink);
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--dark-pink);
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .yes-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        .no-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .no-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        #response-text {
+            margin-top: 1.5rem;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        .success { color: #2e7d32; font-size: 1.2rem; }
+        .error { color: #c62828; animation: shake 0.5s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts"></div>
+
+    <div class="card">
+        <!-- Change src to photo1.jpg or photo2.jpg if you have different photos -->
+        <img src="photo1.jpg" alt="Sorry" class="profile-img">
+        <h1>I'm Sorry!</h1>
+        <p>"Bohot marungi"... please maaf kar do? 🥺</p>
+        
+        <div class="btn-container">
+            <button class="yes-btn" onclick="accept()">Yes</button>
+            <button class="no-btn" onclick="reject()">No</button>
+        </div>
+
+        <div id="response-text"></div>
+    </div>
+
+    <audio id="bg-audio" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Start audio on first click
+        document.body.addEventListener('click', function() {
+            const audio = document.getElementById('bg-audio');
+            audio.play();
+        }, { once: true });
+
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const heartIcons = ['❤️', '💖', '✨', '🌸'];
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        function accept() {
+            const resp = document.getElementById('response-text');
+            resp.innerHTML = '<span class="success">Thank you my lord! 👑✨</span>';
+            confettiEffect();
+        }
+
+        function reject() {
+            const resp = document.getElementById('response-text');
+            resp.innerHTML = '<span class="error">Error please try again later. ⚠️</span>';
+        }
+
+        function confettiEffect() {
+            // Simple visual feedback for "Yes"
+            document.body.style.backgroundColor = "#e8f5e9";
+            setTimeout(() => {
+                document.body.style.backgroundColor = "#fff0f3";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
